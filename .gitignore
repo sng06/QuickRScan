@@ -87,11 +87,11 @@ lint/tmp/
 .DS_Store
 .vscode/*
 .history/
-node_modules
-firestore.rules
-storage.rule
-gulpfile.json
+/node_modules
+/firestore.rules
+/storage.rule
+/gulpfile.json
 .firebaserc
-bower.json
+/bower.json
 
 
