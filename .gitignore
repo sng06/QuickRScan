@@ -87,4 +87,6 @@ lint/tmp/
 .DS_Store
 .vscode/*
 .history/
-node/modules
+node_modules
+storage.rules
+firestore.rules
