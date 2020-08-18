@@ -1,28 +1,49 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { createBrowserHistory } from "history";
+import App from "./App";
+import * as serviceWorker from "./serviceWorker";
+import { Provider } from "react-redux";
 import { Router, Route, Switch } from "react-router-dom";
+import { createBrowserHistory } from "history";
+import { createStore, applyMiddleware } from "redux";
+import { BrowserRouter } from "react-router-dom";
+import thunk from "redux-thunk";
+import reducers from "./reducers";
 
-import "assets/scss/material-kit-react.scss?v=1.8.0";
-
-// pages for this product
-import Components from "views/Components/Components.js";
 import LandingPage from "views/LandingPage/LandingPage.js";
-import ProfilePage from "views/ProfilePage/ProfilePage.js";
-import LoginPage from "views/LoginPage/LoginPage.js";
+import Login from "views/LoginPage/Login.js";
 import ContentPage from "views/ContentPage/ContentPage.js";
 
-var hist = createBrowserHistory();
+const store = createStore(reducers, applyMiddleware(thunk));
+export const hist = createBrowserHistory();
+
+// ReactDOM.render(
+//   <BrowserRouter>
+//     <Provider store={store}>
+//       <App />
+//       <div className={"App"}>
+//         <Switch>
+//           <Route path="/landing-page" component={LandingPage} />
+//           <Route path="/content-page" component={ContentPage} />
+//           <Route path="/login-page" component={Login} />
+//           {/* <Route path="/" component={Templates} /> */}
+//         </Switch>
+//       </div>
+//     </Provider>
+//   </BrowserRouter>,
+//   document.getElementById("root")
+// );
 
 ReactDOM.render(
   <Router history={hist}>
-    <Switch>
-      <Route path="/landing-page" component={LandingPage} />
-      <Route path="/profile-page" component={ProfilePage} />
-      <Route path="/content-page" component={ContentPage} />
-      <Route path="/login-page" component={LoginPage} />
-      <Route path="/" component={Components} />
-    </Switch>
+    <Provider store={store}>
+      <App />
+    </Provider>
   </Router>,
   document.getElementById("root")
 );
+
+// If you want your app to work offline and load faster, you can change
+// unregister() to register() below. Note this comes with some pitfalls.
+// Learn more about service workers: https://bit.ly/CRA-PWA
+serviceWorker.unregister();
