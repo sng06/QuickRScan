@@ -69,6 +69,13 @@ jspm_packages/
 
 # Optional eslint cache
 .eslintcache
+.history/
+/node_modules
+/firestore.rules
+/storage.rule
+/gulpfile.json
+.firebaserc
+/bower.json
 
 # Optional REPL history
 .node_repl_history
