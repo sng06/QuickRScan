@@ -18,25 +18,6 @@ class Login extends React.Component {
     super(props);
   }
 
-  // componentDidMount() {
-  //   firebaseAuth().onAuthStateChanged(async (userAuth) => {
-  //     if (userAuth) {
-  //       const user = await createUserProfileDocument(userAuth);
-  //       user.onSnapshot((snapshot) => {
-  //         this.setState({
-  //           currentUser: {
-  //             id: snapshot.id,
-  //             ...snapshot.data(),
-  //           },
-  //         });
-  //         // console.log("checking: ", this.state.currentUser);
-  //         console.log("checking: ", snapshot);
-  //       });
-  //     }
-  //     this.setState({ currentUser: userAuth });
-  //   });
-  // }
-
   componentDidMount() {
     this.props.loadUserData();
   }
@@ -46,12 +27,6 @@ class Login extends React.Component {
       console.log(err);
     });
   };
-
-  // handleRedirect = () => {
-  //   if (this.props.userInfo.isLoggedIn) {
-  //     this.props.history.push("/content-page");
-  //   }
-  // };
 
   render() {
     const { classes } = this.props;

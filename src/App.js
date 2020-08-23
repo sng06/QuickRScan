@@ -4,7 +4,8 @@ import { Redirect, Route, Switch } from "react-router-dom";
 // import Templates from "components/Templates/Components.js";
 import LandingPage from "views/LandingPage/LandingPage.js";
 import Login from "views/LoginPage/Login.js";
-import ContentPage from "views/ContentPage/ContentPage.js";
+import UploadImageView from "views/ContentPage/UploadImageView.js";
+import ResultView from "views/ContentPage/ResultView.js";
 
 const App = () => {
   //this is how you make a functional component
@@ -13,7 +14,8 @@ const App = () => {
       <Switch>
         <Route exact path="/" component={Login} />
         <Route path="/landing-page" component={LandingPage} />
-        <Route path="/content" component={ContentPage} />
+        <Route path="/uploadImage" component={UploadImageView} />
+        <Route path="/result" component={ResultView} />
         {/* <Route path="/login" component={Login} /> */}
       </Switch>
     </div>

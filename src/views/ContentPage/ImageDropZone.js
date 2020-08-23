@@ -1,5 +1,12 @@
 import React, { useMemo, useState, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
+import Button from "components/CustomButtons/Button.js";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faImages } from "@fortawesome/free-solid-svg-icons";
+import firebase from "firebase";
+import { storage } from "config/FirebaseConfig";
+import { firestore } from "config/FirebaseConfig";
+import { hist } from "../../index";
 //https://upmostly.com/tutorials/react-dropzone-file-uploads-react
 //https://react-dropzone.js.org/
 
@@ -33,6 +40,52 @@ const rejectStyle = {
   borderColor: "#ff1744",
 };
 
+const imageIconStyle = {
+  display: "block",
+  marginLeft: "auto",
+  marginRight: "auto",
+};
+
+const buttonStyle = {
+  marginTop: 15,
+  display: "block",
+  marginLeft: "auto",
+  marginRight: "auto",
+};
+
+// const thumbs = files.map((file) => (
+//   <div style={thumb} key={file.name}>
+//     <div style={thumbInner}>
+//       <img src={file.preview} width="550" height="550" />
+//     </div>
+//   </div>
+// ));
+
+// const thumbsContainer = {
+//   display: "flex",
+//   flexDirection: "row",
+//   flexWrap: "wrap",
+//   marginTop: 16,
+// };
+
+// const thumb = {
+//   display: "inline-flex",
+//   borderRadius: 2,
+//   border: "1px solid #eaeaea",
+//   marginBottom: 8,
+//   marginRight: 8,
+//   // // width: 100,
+//   // height: 100,
+//   padding: 4,
+//   boxSizing: "border-box",
+// };
+
+// const thumbInner = {
+//   display: "flex",
+//   minWidth: 0,
+//   overflow: "hidden",
+// };
+
 export default function ImageDropZone(props) {
   const [files, setFiles] = useState([]);
   const [image, setImage] = useState("");
@@ -61,14 +114,6 @@ export default function ImageDropZone(props) {
     );
   };
 
-  const thumbs = files.map((file) => (
-    <div style={thumb} key={file.name}>
-      <div style={thumbInner}>
-        <img src={file.preview} style={img} />
-      </div>
-    </div>
-  ));
-
   const {
     getRootProps,
     getInputProps,
@@ -92,49 +137,83 @@ export default function ImageDropZone(props) {
     [isDragActive, isDragReject, isDragAccept]
   );
 
-  const thumbsContainer = {
-    display: "flex",
-    flexDirection: "row",
-    flexWrap: "wrap",
-    marginTop: 16,
-  };
+  const handleImageUpload = () => {
+    const uploadTask = storage.ref(`images/${image.name}`).put(image);
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        // progrss function ....
+        // const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+        // this.setState({progress});
+        console.log("Uploading.....");
+      },
+      (error) => {
+        // error function ....
+        console.log(error);
+      },
+      async () => {
+        // complete function ....
+        let { bucket, fullPath } = await storage
+          .ref("images")
+          .child(image.name)
+          .getMetadata();
+        console.log("bucket", bucket);
+        console.log("fullPath", fullPath);
 
-  const thumb = {
-    display: "inline-flex",
-    borderRadius: 2,
-    border: "1px solid #eaeaea",
-    marginBottom: 8,
-    marginRight: 8,
-    width: 100,
-    height: 100,
-    padding: 4,
-    boxSizing: "border-box",
-  };
+        let downloadURL = await storage
+          .ref("images")
+          .child(image.name)
+          .getDownloadURL();
+        console.log("downloadURL", downloadURL);
 
-  const thumbInner = {
-    display: "flex",
-    minWidth: 0,
-    overflow: "hidden",
-  };
+        let newPhoto = {
+          imageURL: downloadURL,
+          userName: props.userInfo.userName,
+          email: props.userInfo.userEmail,
+          createdAtLocalTime: new Date().toLocaleString(),
+          createAtServerTime: firebase.firestore.FieldValue.serverTimestamp(),
+          bucket,
+          fullPath,
+        };
+        console.log("newPhoto", newPhoto);
 
-  const img = {
-    display: "block",
-    width: "auto",
-    height: "100%",
+        await firestore.collection("results").add(newPhoto);
+        hist.push("/result");
+      }
+    );
   };
 
   return (
     <section className="container">
-      <div {...getRootProps({ style })}>
+      <div className="dropzone" {...getRootProps({ style })}>
         <input {...getInputProps()} />
-        {!isDragActive && "Click here or drag & drop a file to upload!"}
+        {/* {!isDragActive && "Click here or drag & drop a file to upload!"}
         {isDragActive && !isDragReject && "Drop it like it's hot!"}
-        {isDragReject && "File type not accepted, sorry!"}
+        {isDragReject && "File type not accepted, sorry!"} */}
+
+        {files.length > 0 ? (
+          <img src={files[0].preview} width="550" height="550" />
+        ) : (
+          <div className="defaultBackground">
+            <FontAwesomeIcon icon={faImages} size="3x" style={imageIconStyle} />
+            <br />
+            {!isDragActive && "Click here or drag & drop a file to upload!"}
+            {isDragActive && !isDragReject && "Drop it like it's hot!"}
+            {isDragReject && "File type not accepted, sorry!"}
+          </div>
+        )}
       </div>
-      {/* {image ? (
-        <img src={imagePreview} alt="dummy" width="200" height="200" />
-      ) : null} */}
-      <aside style={thumbsContainer}>{thumbs}</aside>
+      {/* <aside style={thumbsContainer}>{thumbs}</aside> */}
+      {image ? (
+        <Button
+          color="primary"
+          variant="outlined"
+          style={buttonStyle}
+          onClick={handleImageUpload}
+        >
+          DETECT TEXT
+        </Button>
+      ) : null}
     </section>
   );
 }

@@ -10,10 +10,6 @@ import { BrowserRouter } from "react-router-dom";
 import thunk from "redux-thunk";
 import reducers from "./reducers";
 
-import LandingPage from "views/LandingPage/LandingPage.js";
-import Login from "views/LoginPage/Login.js";
-import ContentPage from "views/ContentPage/ContentPage.js";
-
 const store = createStore(reducers, applyMiddleware(thunk));
 export const hist = createBrowserHistory();
 
