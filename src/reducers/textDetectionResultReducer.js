@@ -17,7 +17,7 @@ export default function textDetectionResultReducer(
     return {
       ...state,
       imageURL: action.payload.imageURL,
-      textResult: action.payload.textResult.description,
+      textResult: action.payload.textResult,
       loading: false,
     };
   }

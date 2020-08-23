@@ -5,6 +5,7 @@ import compose from "recompose/compose";
 import Paper from "@material-ui/core/Paper";
 import Header from "views/Navigation/Header.js";
 import ImageDropZone from "views/ContentPage/ImageDropZone";
+import { hist } from "../../index";
 
 const useStyles = (theme) => ({
   contentOverlay: {
@@ -22,6 +23,10 @@ const useStyles = (theme) => ({
 class UploadImageView extends React.Component {
   constructor(props) {
     super(props);
+  }
+
+  componentDidMount() {
+    hist.push("/result");
   }
 
   render() {
