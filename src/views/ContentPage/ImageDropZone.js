@@ -90,6 +90,7 @@ export default function ImageDropZone(props) {
   const [files, setFiles] = useState([]);
   const [image, setImage] = useState("");
   const [imagePreview, setImagePreview] = useState("");
+  const imgElement = React.useRef(null);
 
   useEffect(
     () => () => {
@@ -136,6 +137,15 @@ export default function ImageDropZone(props) {
     }),
     [isDragActive, isDragReject, isDragAccept]
   );
+
+  // const imageSize = (image) => {
+  //   // let img = new Image();
+  //   // img.onload = function() {
+  //   //   alert("height: " + img.height + "width: " + img.width);
+  //   // };
+  //   // img.src = image;
+  //   console.log("image size", image.offsetWidth, offsetHeight);
+  // };
 
   const handleImageUpload = () => {
     const uploadTask = storage.ref(`images/${image.name}`).put(image);
@@ -192,7 +202,19 @@ export default function ImageDropZone(props) {
         {isDragReject && "File type not accepted, sorry!"} */}
 
         {files.length > 0 ? (
-          <img src={files[0].preview} width="550" height="550" />
+          <img
+            src={files[0].preview}
+            width="550"
+            height="550"
+            ref={imgElement}
+            onLoad={() =>
+              console.log(
+                "image size",
+                imgElement.current.naturalHeight,
+                imgElement.current.naturalWidth
+              )
+            }
+          />
         ) : (
           <div className="defaultBackground">
             <FontAwesomeIcon icon={faImages} size="3x" style={imageIconStyle} />
@@ -205,14 +227,17 @@ export default function ImageDropZone(props) {
       </div>
       {/* <aside style={thumbsContainer}>{thumbs}</aside> */}
       {image ? (
-        <Button
-          color="primary"
-          variant="outlined"
-          style={buttonStyle}
-          onClick={handleImageUpload}
-        >
-          DETECT TEXT
-        </Button>
+        <div>
+          <Button
+            color="primary"
+            variant="outlined"
+            style={buttonStyle}
+            onClick={handleImageUpload}
+          >
+            DETECT TEXT
+          </Button>
+          {/* {imageSize(image)} */}
+        </div>
       ) : null}
     </section>
   );
