@@ -64,15 +64,15 @@ class Header extends React.Component {
                 variant="h5"
                 className={classes.websiteTitle}
               >
-                {/* <Link
-                to={"/"}
-                style={{
-                  textDecoration: "none",
-                  color: "inherit",
-                }}
-              > */}
-                QuickRScan
-                {/* </Link> */}
+                <Link
+                  to={"/uploadImage"}
+                  style={{
+                    textDecoration: "none",
+                    color: "inherit",
+                  }}
+                >
+                  QuickRScan
+                </Link>
               </Typography>
 
               <List className="menu-list">

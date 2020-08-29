@@ -1,11 +1,12 @@
 import React from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
-// export default App;
-// import Templates from "components/Templates/Components.js";
-import LandingPage from "views/LandingPage/LandingPage.js";
+import { toast } from "react-toastify";
+
 import Login from "views/LoginPage/Login.js";
-import UploadImageView from "views/ContentPage/UploadImageView.js";
-import ResultView from "views/ContentPage/ResultView.js";
+import UploadImageView from "views/ImageUploadView/ImageUploadView.js";
+import ResultView from "views/ResultView/ResultView.js";
+
+toast.configure();
 
 const App = () => {
   //this is how you make a functional component
@@ -13,7 +14,6 @@ const App = () => {
     <div className={"App"}>
       <Switch>
         <Route exact path="/" component={Login} />
-        <Route path="/landing-page" component={LandingPage} />
         <Route path="/uploadImage" component={UploadImageView} />
         <Route path="/result" component={ResultView} />
         {/* <Route path="/login" component={Login} /> */}

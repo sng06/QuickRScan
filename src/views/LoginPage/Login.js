@@ -3,13 +3,14 @@ import { withStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
 import compose from "recompose/compose";
 import Typography from "@material-ui/core/Typography";
-import Button from "components/CustomButtons/Button.js";
+import Button from "items/CustomButtons/Button.js";
 import Box from "@material-ui/core/Box";
 import image from "assets/img/bg7.jpg";
 import styles from "assets/jss/material-kit-react/views/loginPage.js";
-
+import { handleGoogleLogin } from "../../actions/index";
 import { loginWithGoogle } from "views/LoginPage/LoginAuth";
 import { loadUserData } from "../../actions/index";
+import { loadAccessToken } from "../../actions/index";
 import { firebaseAuth } from "config/FirebaseConfig";
 import { hist } from "index";
 
@@ -18,14 +19,19 @@ class Login extends React.Component {
     super(props);
   }
 
-  componentDidMount() {
-    this.props.loadUserData();
-  }
+  // componentDidMount() {
+  //   this.props.loadUserData();
+  // }
 
   handleGoogleLogin = () => {
-    loginWithGoogle().catch((err) => {
-      console.log(err);
-    });
+    loginWithGoogle()
+      .then((res) => {
+        // this.props.loadAccessToken(res.credential.accessToken);
+        this.props.loadUserData(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   render() {
@@ -66,7 +72,10 @@ class Login extends React.Component {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    loadUserData: () => dispatch(loadUserData()),
+    // loadUserData: () => dispatch(loadUserData()),
+    loadUserData: (res) => dispatch(loadUserData(res)),
+    // loadAccessToken: (token) => dispatch(loadAccessToken(token)),
+    // handleGoogleLogin: () => dispatch(handleGoogleLogin()),
   };
 };
 

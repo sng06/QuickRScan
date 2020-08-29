@@ -99,3 +99,9 @@ lerna-debug.log
 # System Files
 .DS_Store
 Thumbs.db
+
+#endpoint key
+**/endPointKey.json
+
+#googleClient key
+**/googleClientKey.json

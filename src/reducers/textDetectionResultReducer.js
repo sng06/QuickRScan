@@ -9,11 +9,11 @@ export default function textDetectionResultReducer(
   action
 ) {
   if (action.type === "LOAD_TEXT_DETECTION_RES") {
-    console.log(
-      "checking text data: ",
-      action.payload.imageURL,
-      action.payload.textResult.description
-    );
+    // console.log(
+    //   "checking text data: ",
+    //   action.payload.imageURL
+    //   // action.payload.textResult.description
+    // );
     return {
       ...state,
       imageURL: action.payload.imageURL,
